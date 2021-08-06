@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Core/Inventory/BaseInventory.h"
 #include "InventGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -13,6 +14,8 @@ class AInventGameMode : public AGameModeBase
 
 public:
 	AInventGameMode();
+
+	ABaseInventory* Inventory;
 };
 
 

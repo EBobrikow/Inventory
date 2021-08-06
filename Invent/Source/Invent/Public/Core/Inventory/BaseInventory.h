@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Core/Inventory/BaseItem.h"
+
 #include "BaseInventory.generated.h"
 
 USTRUCT(BlueprintType)
@@ -17,7 +18,7 @@ public:
 	int32 Amount;
 
 	UPROPERTY(BlueprintReadWrite)
-	TSubclassOf<ABaseItem> Item;
+	ABaseItem* Item;
 };
 
 UCLASS()
@@ -37,8 +38,19 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FSlotSignature> Slots;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SlotsAmount;
 	
+	UFUNCTION(BlueprintCallable)
+	void Init();
 
+	UFUNCTION(BlueprintCallable)
+	void AddEmptySlot();
 
-
+	UFUNCTION(BlueprintCallable)
+	void AddItemToSlot(FSlotSignature Item, int32 SlotNum);
+	
+	UFUNCTION(BlueprintCallable)
+	void SwapSlotContent(int32 SlotNum1, int32 SlotNum2);
 };

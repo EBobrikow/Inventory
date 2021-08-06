@@ -4,6 +4,7 @@
 #include "Core/Actors/InventCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
+
 AInventGameMode::AInventGameMode()
 {
 	// set default pawn class to our Blueprinted character
@@ -12,4 +13,8 @@ AInventGameMode::AInventGameMode()
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
 	}
+
+	FActorSpawnParameters SpawnInfo;
+	Inventory = GWorld->SpawnActor<ABaseInventory>( FVector(0,0,0), FRotator::ZeroRotator, SpawnInfo);
+	
 }
