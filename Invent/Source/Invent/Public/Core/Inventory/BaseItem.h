@@ -30,7 +30,7 @@ public:
 	FText Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item params")
-	TEnumAsByte<ItemTypes> ItemType;
+	TEnumAsByte<EItemTypes> ItemType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item params")
 	UTexture2D* Icon2d;

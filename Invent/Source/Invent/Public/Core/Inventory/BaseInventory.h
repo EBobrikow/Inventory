@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Core/Inventory/BaseItem.h"
-
+#include "GameFramework/Character.h"
 #include "BaseInventory.generated.h"
 
 USTRUCT(BlueprintType)
@@ -36,12 +36,24 @@ protected:
 
 public:	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
 	TArray<FSlotSignature> Slots;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
 	int32 SlotsAmount;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
+	TEnumAsByte<EInventoryState> InventoryState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
+	TEnumAsByte<EInventoryStartMode> StartMode;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
+	ACharacter* CharacterRef;
 	
+	UFUNCTION(BlueprintCallable)
+	FSlotSignature GetItemInfoByIndex(int32 Index, bool& IsEmpty) const;
+
 	UFUNCTION(BlueprintCallable)
 	void Init();
 

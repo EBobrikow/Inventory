@@ -3,19 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/GameModeBase.h"
+
+#include "GameFramework/GameMode.h"
 #include "Core/Inventory/BaseInventory.h"
 #include "InventGameMode.generated.h"
 
 UCLASS(minimalapi)
-class AInventGameMode : public AGameModeBase
+class AInventGameMode : public AGameMode
 {
 	GENERATED_BODY()
 
 public:
 	AInventGameMode();
 
+	UPROPERTY()
 	ABaseInventory* Inventory;
+
+protected:
+
+	virtual void BeginPlay() override;
+
+
 };
 
 

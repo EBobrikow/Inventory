@@ -10,7 +10,7 @@
  * 
  */
 UENUM()
-enum ItemTypes
+enum EItemTypes
 {
 	Unknown     UMETA(DisplayName = "Unknown item"),
 	Quest       UMETA(DisplayName = "Quest item"),
@@ -18,6 +18,24 @@ enum ItemTypes
 	Craft       UMETA(DisplayName = "Craft item"),
 	Weapon      UMETA(DisplayName = "Weapon item"),
 	Armor       UMETA(DisplayName = "Armor item"),
+};
+
+UENUM()
+enum EInventoryStartMode
+{
+	ZeroInited		   UMETA(DisplayName = "Inited as new inventory"),
+	Loaded		       UMETA(DisplayName = "Loaded inventory"),
+	
+};
+
+UENUM()
+enum EInventoryState
+{
+	Closed					UMETA(DisplayName = "Closed state"),
+	OpenFree				UMETA(DisplayName = "Open and free state"),
+	DestroyItemWindow		UMETA(DisplayName = "Destroying item state"),
+	DropItemWindow			UMETA(DisplayName = "Droping item state"),
+
 };
 
 UCLASS()

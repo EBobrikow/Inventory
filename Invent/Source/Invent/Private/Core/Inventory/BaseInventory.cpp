@@ -10,14 +10,39 @@ ABaseInventory::ABaseInventory()
 	PrimaryActorTick.bCanEverTick = false;
 	Slots.Empty();
 	SlotsAmount = 10;
+	Init();
 }
 
 // Called when the game starts or when spawned
 void ABaseInventory::BeginPlay()
 {
 	Super::BeginPlay();
-	Init();
+	
 	UE_LOG(LogTemp,Warning,TEXT("Inited slots %i"),Slots.Num());
+}
+
+FSlotSignature ABaseInventory::GetItemInfoByIndex(int32 Index, bool& IsEmpty) const
+{
+	if (Slots.Num() > 0 && Index <= SlotsAmount)
+	{
+		if (Slots[Index].Item && Slots[Index].Amount > 0)
+		{
+			IsEmpty = false;
+			return Slots[Index];
+		}
+		else
+		{
+			IsEmpty = true;
+			return FSlotSignature();
+		}
+		
+	}
+	else
+	{
+		IsEmpty = true;
+		return FSlotSignature();
+	}
+	
 }
 
 void ABaseInventory::Init()
