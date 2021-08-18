@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Core/Inventory/BaseEnums.h"
+#include "Core/BaseEnums.h"
 #include "Engine/Texture2D.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/NoExportTypes.h"
