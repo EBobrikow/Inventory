@@ -9,6 +9,8 @@ void UBaseInventoryWidget::NativeConstruct()
 	Super::NativeConstruct();
 	SlotsPerRow = 5;
 	GenerateSlotWidgets();
+
+	int32 tmp = 20;
 }
 
 void UBaseInventoryWidget::GenerateSlotWidgets()
