@@ -8,6 +8,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Blueprint/UserWidget.h"
+#include "Core/Inventory/HUD/BaseHUD.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AInventCharacter
@@ -45,6 +48,40 @@ AInventCharacter::AInventCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
+
+	//Create Inventory Component
+	CharacterInventory = CreateDefaultSubobject<UBaseInventory>(TEXT("InventoryComponent"));
+	CharacterInventory->CharacterRef = this;
+	CharacterInventory->SetSlotsAmount(20);//SlotsAmount = 20;
+	CharacterInventory->Init();
+
+
+	
+	
+}
+
+void AInventCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	//FActorSpawnParameters SpawnInfo;
+	//Inventory = GWorld->SpawnActor<UBaseInventory>(FVector(0, 0, 0), FRotator::ZeroRotator, SpawnInfo);
+
+	//if (InventoryWidgetClass)
+	//{
+	//	InventoryWidget = Cast<UBaseInventoryWidget>(CreateWidget(GetWorld(), InventoryWidgetClass));
+	//	InventoryWidget->Inventory = CharacterInventory;
+	//	InventoryWidget->SetPositionInViewport(FVector2D(900, 200));
+	//	InventoryWidget->GenerateSlotWidgets();
+	//	if (InventoryWidget)
+	//	{
+	//		InventoryWidget->AddToViewport();
+	//	}
+	//}
+
+	ABaseHUD* hud = Cast<ABaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
+	hud->InitInventoryWidget(this);
+	
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -56,6 +93,8 @@ void AInventCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &AInventCharacter::OpenCloseInventory);
+	
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AInventCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AInventCharacter::MoveRight);
@@ -74,6 +113,30 @@ void AInventCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AInventCharacter::OnResetVR);
+}
+
+void AInventCharacter::SetInventoryWidgetRef(UBaseInventoryWidget* InventRef)
+{
+	if (InventRef)
+	{
+		InventoryWidget = InventRef;
+	}
+	
+}
+
+void AInventCharacter::OpenCloseInventory()
+{
+	if (InventoryWidget)
+	{
+		if (InventoryWidget->IsInViewport())
+		{
+			InventoryWidget->RemoveFromViewport();
+		}
+		else
+		{
+			InventoryWidget->AddToViewport();
+		}
+	}
 }
 
 

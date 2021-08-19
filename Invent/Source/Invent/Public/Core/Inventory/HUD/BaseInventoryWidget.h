@@ -29,7 +29,7 @@ public:
 	class UButton* Close_Button;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	ABaseInventory* Inventory;
+	UBaseInventory* Inventory;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<UBaseSlotWidget*> SlotWidgetArray;
@@ -45,4 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int32 GetColumn(int32 Index, int32 SlPerRow) const;
+
+protected:
+
+	UFUNCTION()
+		void CloseButtonClicked();
 };

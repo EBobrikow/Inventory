@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Core/Inventory/BaseItem.h"
 #include "GameFramework/Character.h"
+#include "Components/ActorComponent.h"
 #include "BaseInventory.generated.h"
 
 USTRUCT(BlueprintType)
@@ -22,14 +23,14 @@ public:
 };
 
 UCLASS()
-class INVENT_API ABaseInventory : public AActor
+class INVENT_API UBaseInventory : public UActorComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABaseInventory();
-	virtual void Tick(float DeltaTime) override;
+	UBaseInventory();
+	//virtual void Tick(float DeltaTime) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -39,14 +40,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
 	TArray<FSlotSignature> Slots;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
-	int32 SlotsAmount;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
-	TEnumAsByte<EInventoryState> InventoryState;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
-	TEnumAsByte<EInventoryStartMode> StartMode;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory params", meta = (ExposeOnSpawn = "true"))
 	ACharacter* CharacterRef;
@@ -65,4 +59,33 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void SwapSlotContent(int32 SlotNum1, int32 SlotNum2);
+
+	UFUNCTION(BlueprintCallable)
+	void SetSlotsAmount(int32 Amount);
+
+	UFUNCTION(BlueprintCallable)
+	int32 GetSlotsAmount() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetInventoryState(EInventoryState State);
+
+	UFUNCTION(BlueprintCallable)
+	EInventoryState GetInventoryState() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetStartMode(EInventoryStartMode State);
+
+	UFUNCTION(BlueprintCallable)
+	EInventoryStartMode GetStartMode() const;
+
+private:
+
+	UPROPERTY(EditAnywhere, Category = "Inventory params")
+	int32 SlotsAmount;
+
+	UPROPERTY(EditAnywhere, Category = "Inventory params")
+	TEnumAsByte<EInventoryState> InventoryState;
+
+	UPROPERTY(EditAnywhere, Category = "Inventory params")
+	TEnumAsByte<EInventoryStartMode> StartMode;
 };

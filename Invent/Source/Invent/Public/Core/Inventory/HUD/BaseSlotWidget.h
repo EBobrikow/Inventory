@@ -40,7 +40,7 @@ public:
 	FSlotSignature SlotInfo;
 
 	UPROPERTY(BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
-	ABaseInventory* Inventory;
+	UBaseInventory* Inventory;
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateSlot();

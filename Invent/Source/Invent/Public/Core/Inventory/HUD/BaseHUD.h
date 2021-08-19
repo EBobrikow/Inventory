@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
+#include "Core/Inventory/HUD/BaseInventoryWidget.h"
 #include "BaseHUD.generated.h"
 
 /**
@@ -19,4 +20,15 @@ public:
 	virtual void DrawHUD() override;
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+		void InitInventoryWidget(AInventCharacter* Character);
+
+protected:
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<UUserWidget> InventoryWidgetClass;
+
+	UPROPERTY()
+		UBaseInventoryWidget* InventoryWidget;
 };

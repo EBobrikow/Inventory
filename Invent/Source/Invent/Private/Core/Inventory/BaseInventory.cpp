@@ -4,24 +4,24 @@
 #include "Core/Inventory/BaseInventory.h"
 
 // Sets default values
-ABaseInventory::ABaseInventory()
+UBaseInventory::UBaseInventory()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	//PrimaryActorTick.bCanEverTick = false;
 	Slots.Empty();
-	SlotsAmount = 10;
-	Init();
+	//SlotsAmount = 10;
+	//Init();
 }
 
 // Called when the game starts or when spawned
-void ABaseInventory::BeginPlay()
+void UBaseInventory::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	UE_LOG(LogTemp,Warning,TEXT("Inited slots %i"),Slots.Num());
 }
 
-FSlotSignature ABaseInventory::GetItemInfoByIndex(int32 Index, bool& IsEmpty) const
+FSlotSignature UBaseInventory::GetItemInfoByIndex(int32 Index, bool& IsEmpty) const
 {
 	if (Slots.Num() > 0 && Index <= SlotsAmount)
 	{
@@ -45,7 +45,7 @@ FSlotSignature ABaseInventory::GetItemInfoByIndex(int32 Index, bool& IsEmpty) co
 	
 }
 
-void ABaseInventory::Init()
+void UBaseInventory::Init()
 {
 	if (SlotsAmount > 0)
 	{
@@ -56,12 +56,12 @@ void ABaseInventory::Init()
 	}
 }
 
-void ABaseInventory::AddEmptySlot()
+void UBaseInventory::AddEmptySlot()
 {
 	Slots.Add(FSlotSignature());
 }
 
-void ABaseInventory::AddItemToSlot(FSlotSignature Item, int32 SlotNum)
+void UBaseInventory::AddItemToSlot(FSlotSignature Item, int32 SlotNum)
 {
 	if (SlotNum < SlotsAmount && SlotNum >= 0)
 	{
@@ -69,7 +69,7 @@ void ABaseInventory::AddItemToSlot(FSlotSignature Item, int32 SlotNum)
 	}
 }
 
-void ABaseInventory::SwapSlotContent(int32 SlotNum1, int32 SlotNum2)
+void UBaseInventory::SwapSlotContent(int32 SlotNum1, int32 SlotNum2)
 {
 	if (Slots.Num() > 0 && SlotNum1 <= SlotsAmount && SlotNum2 <= SlotsAmount)
 	{
@@ -79,10 +79,40 @@ void ABaseInventory::SwapSlotContent(int32 SlotNum1, int32 SlotNum2)
 	}
 }
 
-// Called every frame
-void ABaseInventory::Tick(float DeltaTime)
+void UBaseInventory::SetSlotsAmount(int32 Amount)
 {
-	Super::Tick(DeltaTime);
-
+	SlotsAmount = Amount;
 }
+
+int32 UBaseInventory::GetSlotsAmount() const
+{
+	return SlotsAmount;
+}
+
+void UBaseInventory::SetInventoryState(EInventoryState State)
+{
+	InventoryState = State;
+}
+
+EInventoryState UBaseInventory::GetInventoryState() const
+{
+	return InventoryState;
+}
+
+void UBaseInventory::SetStartMode(EInventoryStartMode State)
+{
+	StartMode = State;
+}
+
+EInventoryStartMode UBaseInventory::GetStartMode() const
+{
+	return StartMode;
+}
+
+// Called every frame
+//void UBaseInventory::Tick(float DeltaTime)
+//{
+//	Super::Tick(DeltaTime);
+//
+//}
 

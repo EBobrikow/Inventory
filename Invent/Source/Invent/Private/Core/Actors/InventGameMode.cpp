@@ -23,6 +23,6 @@ void AInventGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	FActorSpawnParameters SpawnInfo;
-	Inventory = GWorld->SpawnActor<ABaseInventory>( FVector(0,0,0), FRotator::ZeroRotator, SpawnInfo);
+	/*FActorSpawnParameters SpawnInfo;
+	Inventory = GWorld->SpawnActor<ABaseInventory>( FVector(0,0,0), FRotator::ZeroRotator, SpawnInfo);*/
 }

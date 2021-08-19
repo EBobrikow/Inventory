@@ -16,8 +16,7 @@ class AInventGameMode : public AGameMode
 public:
 	AInventGameMode();
 
-	UPROPERTY()
-	ABaseInventory* Inventory;
+	
 
 protected:
 

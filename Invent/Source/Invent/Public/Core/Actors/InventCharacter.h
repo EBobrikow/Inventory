@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Core/Inventory/BaseInventory.h"
+#include "Core/Inventory/HUD/BaseInventoryWidget.h"
 #include "InventCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -20,6 +22,8 @@ class AInventCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 public:
 	AInventCharacter();
+
+	virtual void BeginPlay() override;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -68,5 +72,31 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+
+public:
+	// Inventory section
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UBaseInventory* CharacterInventory;
+
+
+	UFUNCTION(BlueprintCallable)
+	void SetInventoryWidgetRef(UBaseInventoryWidget* InventRef);
+	
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<UUserWidget> InventoryWidgetClass;
+
+protected:
+
+	void OpenCloseInventory();
+	
+
+	UPROPERTY()
+	UBaseInventoryWidget* InventoryWidget;
+
+	
+
+
+	//End Inventory section
 };
 

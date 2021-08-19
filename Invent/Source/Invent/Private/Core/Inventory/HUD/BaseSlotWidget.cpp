@@ -8,7 +8,7 @@ void UBaseSlotWidget::NativeConstruct()
 {
     // Call the Blueprint "Event Construct" node
     Super::NativeConstruct();
-
+   
  
 }
 
@@ -22,29 +22,36 @@ void UBaseSlotWidget::UpdateSlotAmount()
 
 void UBaseSlotWidget::UpdateSlot()
 {
+    SlotAmountTxtCombo = NewObject<UTextBlock>(UTextBlock::StaticClass());//CreateDefaultSubobject<UTextBlock>(TEXT("SlotTxtCombo"));
+    ItemIcon = NewObject<UImage>(UImage::StaticClass());
     if (Inventory)
     {
         bool isEmpty = true;
         SlotInfo = Inventory->GetItemInfoByIndex(SlotIndex, isEmpty);
         if (isEmpty)
         {
-            SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden);
-            ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+           if (SlotAmountTxtCombo)  SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden);
+           if (ItemIcon)            ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+            
         }
         else
         {
-            ItemIcon->SetBrushFromTexture(SlotInfo.Item->Icon2d);
-            ItemIcon->SetVisibility(ESlateVisibility::Visible);
-            if (!SlotInfo.Item->isStackable)
+            if (SlotAmountTxtCombo && ItemIcon)
             {
-                SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden);
+                ItemIcon->SetBrushFromTexture(SlotInfo.Item->Icon2d);
+                ItemIcon->SetVisibility(ESlateVisibility::Visible);
+                if (!SlotInfo.Item->isStackable)
+                {
+                    SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden);
+                }
+                else
+                {
+                    SlotAmount = SlotInfo.Amount;
+                    SlotAmountTxtCombo->SetText(FText::FromString(FString::FromInt(SlotAmount)));
+                    SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Visible);
+                }
             }
-            else
-            {
-                SlotAmount = SlotInfo.Amount;
-                SlotAmountTxtCombo->SetText(FText::FromString(FString::FromInt(SlotAmount)));
-                SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Visible);
-            }
+           
         }
     }
     
