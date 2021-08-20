@@ -40,6 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 SlotsPerRow;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UBaseSlotWidget> BaseSlotWidgetClass;
+
 	UFUNCTION(BlueprintCallable)
 	int32 GetRow(int32 Index, int32 SlPerRow) const;
 

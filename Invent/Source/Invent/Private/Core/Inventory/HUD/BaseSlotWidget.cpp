@@ -2,6 +2,7 @@
 
 
 #include "Core/Inventory/HUD/BaseSlotWidget.h"
+#include "Blueprint/WidgetTree.h"
 
 
 void UBaseSlotWidget::NativeConstruct()
@@ -22,16 +23,21 @@ void UBaseSlotWidget::UpdateSlotAmount()
 
 void UBaseSlotWidget::UpdateSlot()
 {
-    SlotAmountTxtCombo = NewObject<UTextBlock>(UTextBlock::StaticClass());//CreateDefaultSubobject<UTextBlock>(TEXT("SlotTxtCombo"));
-    ItemIcon = NewObject<UImage>(UImage::StaticClass());
+   // SlotAmountTxtCombo = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass()); //NewObject<UTextBlock>(UTextBlock::StaticClass());//CreateDefaultSubobject<UTextBlock>(TEXT("SlotTxtCombo"));
+    ItemIcon = NewObject<UImage>(UImage::StaticClass()); // WidgetTree->ConstructWidget<UImage>(UImage::StaticClass);
     if (Inventory)
     {
         bool isEmpty = true;
         SlotInfo = Inventory->GetItemInfoByIndex(SlotIndex, isEmpty);
         if (isEmpty)
         {
-           if (SlotAmountTxtCombo)  SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden);
-           if (ItemIcon)            ItemIcon->SetVisibility(ESlateVisibility::Hidden);
+            if (SlotAmountTxtCombo)
+            {
+                SlotAmountTxtCombo->SetVisibility(ESlateVisibility::Hidden); 
+            }
+               
+           if (ItemIcon)           
+               ItemIcon->SetVisibility(ESlateVisibility::Hidden);
             
         }
         else

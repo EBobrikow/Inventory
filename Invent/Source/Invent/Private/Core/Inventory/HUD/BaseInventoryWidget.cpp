@@ -2,6 +2,7 @@
 
 
 #include "Core/Inventory/HUD/BaseInventoryWidget.h"
+#include "Blueprint/WidgetTree.h"
 
 void UBaseInventoryWidget::NativeConstruct()
 {
@@ -24,8 +25,9 @@ void UBaseInventoryWidget::GenerateSlotWidgets()
 	{
 		for (int32 i = 0; i < Inventory->Slots.Num(); i++)
 		{
-			UBaseSlotWidget* SlotPanel = CreateWidget<UBaseSlotWidget>(this, UBaseSlotWidget::StaticClass());// CreateWidget<UBaseSlotWidget>(TEXT("slot"));
+			UBaseSlotWidget* SlotPanel = WidgetTree->ConstructWidget<UBaseSlotWidget>(BaseSlotWidgetClass);//CreateWidget<UBaseSlotWidget>(this, UBaseSlotWidget::StaticClass());// CreateWidget<UBaseSlotWidget>(TEXT("slot"));
 			SlotPanel->Inventory = this->Inventory;
+			SlotPanel->SlotIndex = i;
 			Slot_Panel->AddChildToUniformGrid(SlotPanel, GetRow(i, 5), GetColumn(i, 5));
 			SlotWidgetArray.Add(SlotPanel);
 			SlotPanel->UpdateSlot();
