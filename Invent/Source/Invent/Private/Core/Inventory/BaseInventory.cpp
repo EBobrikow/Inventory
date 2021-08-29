@@ -2,6 +2,7 @@
 
 
 #include "Core/Inventory/BaseInventory.h"
+#include "Core/Inventory/HUD/BaseInventoryWidget.h"
 
 // Sets default values
 UBaseInventory::UBaseInventory()
@@ -107,6 +108,27 @@ void UBaseInventory::SetStartMode(EInventoryStartMode State)
 EInventoryStartMode UBaseInventory::GetStartMode() const
 {
 	return StartMode;
+}
+
+UBaseInventoryWidget* UBaseInventory::GetInventoryWidget() const
+{
+	if (InventoryWidget)
+	{
+		return InventoryWidget;
+	}
+	else
+	{
+		return nullptr;
+	}
+	
+}
+
+void UBaseInventory::SetInventoryWidget(UBaseInventoryWidget* invWidgetRef)
+{
+	if (invWidgetRef)
+	{
+		InventoryWidget = invWidgetRef;
+	}
 }
 
 // Called every frame

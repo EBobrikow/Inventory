@@ -11,6 +11,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Core/Inventory/HUD/BaseHUD.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AInventCharacter
@@ -82,6 +83,7 @@ void AInventCharacter::BeginPlay()
 	ABaseHUD* hud = Cast<ABaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	hud->InitInventoryWidget(this);
 	
+	CharacterController = UGameplayStatics::GetPlayerController(this, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -115,27 +117,70 @@ void AInventCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AInventCharacter::OnResetVR);
 }
 
-void AInventCharacter::SetInventoryWidgetRef(UBaseInventoryWidget* InventRef)
+UBaseInventory* AInventCharacter::GetCharacterInventory() const
 {
-	if (InventRef)
+	if (CharacterInventory)
 	{
-		InventoryWidget = InventRef;
+		return CharacterInventory;
+	}
+	else
+	{
+		return nullptr;
 	}
 	
 }
 
+//void AInventCharacter::SetInventoryWidgetRef(UBaseInventoryWidget* InventRef)
+//{
+//	if (InventRef)
+//	{
+//		
+//		InventoryWidget = InventRef;
+//	}
+//	
+//}
+
 void AInventCharacter::OpenCloseInventory()
 {
-	if (InventoryWidget)
+	if (CharacterInventory->GetInventoryWidget())
 	{
-		if (InventoryWidget->IsInViewport())
-		{
-			InventoryWidget->RemoveFromViewport();
-		}
-		else
-		{
-			InventoryWidget->AddToViewport();
-		}
+		CharacterInventory->GetInventoryWidget()->CloseOpenWidget();
+
+		//if (InventoryWidget->IsInViewport())
+		//{
+		//	if (CharacterController)
+		//	{
+		//		CharacterController->SetInputMode(FInputModeGameOnly());
+		//		CharacterController->bShowMouseCursor = false;
+		//		CharacterController->bEnableClickEvents = false;
+		//		CharacterController->bEnableMouseOverEvents = false;
+
+		//		
+		//	}
+		//	
+
+		//	InventoryWidget->RemoveFromViewport();
+
+		//	
+		//}
+		//else
+		//{
+		//	
+		//	InventoryWidget->AddToViewport();
+		//	//InventoryWidget->SetUserFocus(UGameplayStatics::GetPlayerController(this, 0));
+
+		//	if (CharacterController)
+		//	{
+		//		CharacterController->SetInputMode(FInputModeGameAndUI());
+		//		CharacterController->bShowMouseCursor = true;
+		//		CharacterController->bEnableClickEvents = true;
+		//		CharacterController->bEnableMouseOverEvents = true;
+
+		//		
+		//	}
+		//	
+
+		//}
 	}
 }
 

@@ -49,8 +49,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int32 GetColumn(int32 Index, int32 SlPerRow) const;
 
+	UFUNCTION(BlueprintCallable)
+	void CloseOpenWidget();
+
 protected:
 
-	UFUNCTION()
-		void CloseButtonClicked();
+	
+		
 };

@@ -48,7 +48,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool IsEmptySlot();
 
-	/*UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
-	UTexture2D* ItemIcon;*/
+	
 	
 };

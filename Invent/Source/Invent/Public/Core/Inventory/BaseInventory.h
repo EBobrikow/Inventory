@@ -78,6 +78,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	EInventoryStartMode GetStartMode() const;
 
+	UFUNCTION(BlueprintCallable)
+	UBaseInventoryWidget* GetInventoryWidget() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetInventoryWidget(UBaseInventoryWidget* invWidgetRef);
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Inventory params")
@@ -88,4 +94,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Inventory params")
 	TEnumAsByte<EInventoryStartMode> StartMode;
+
+protected:
+
+	UPROPERTY()
+	UBaseInventoryWidget* InventoryWidget;
 };

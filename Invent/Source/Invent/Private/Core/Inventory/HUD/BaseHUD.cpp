@@ -42,22 +42,19 @@ void ABaseHUD::InitInventoryWidget(AInventCharacter* Character)
 		
 		if (Character)
 		{
-			Character->SetInventoryWidgetRef(InventoryWidget);
-			InventoryWidget->Inventory = Character->CharacterInventory;
+			Character->GetCharacterInventory()->SetInventoryWidget(InventoryWidget);
+			InventoryWidget->Inventory = Character->GetCharacterInventory();
 			InventoryWidget->GenerateSlotWidgets();
 		}
 	}
 	
-	
-	
-
 	
 
 	if (InventoryWidgetClass)
 	{
 		if (InventoryWidget)
 		{
-			InventoryWidget->AddToViewport();
+			InventoryWidget->bIsFocusable = true;
 		}
 	}
 }

@@ -67,21 +67,25 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
 
+	UPROPERTY()
+	APlayerController* CharacterController;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UFUNCTION(BlueprintCallable)
+	UBaseInventory* GetCharacterInventory() const;
 
 public:
 	// Inventory section
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UBaseInventory* CharacterInventory;
+	
 
 
-	UFUNCTION(BlueprintCallable)
-	void SetInventoryWidgetRef(UBaseInventoryWidget* InventRef);
+	/*UFUNCTION(BlueprintCallable)
+	void SetInventoryWidgetRef(UBaseInventoryWidget* InventRef);*/
 	
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<UUserWidget> InventoryWidgetClass;
@@ -91,10 +95,11 @@ protected:
 	void OpenCloseInventory();
 	
 
-	UPROPERTY()
-	UBaseInventoryWidget* InventoryWidget;
+	/*UPROPERTY()
+	UBaseInventoryWidget* InventoryWidget;*/
 
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	UBaseInventory* CharacterInventory;
 
 
 	//End Inventory section

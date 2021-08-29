@@ -3,6 +3,8 @@
 
 #include "Core/Inventory/HUD/BaseInventoryWidget.h"
 #include "Blueprint/WidgetTree.h"
+#include "GameFramework/PlayerController.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 
 void UBaseInventoryWidget::NativeConstruct()
 {
@@ -12,7 +14,7 @@ void UBaseInventoryWidget::NativeConstruct()
 	//GenerateSlotWidgets();
 
 	FScriptDelegate OnClickDelegate;
-	OnClickDelegate.BindUFunction(this, "CloseButtonClicked");
+	OnClickDelegate.BindUFunction(this, "CloseOpenWidget");
 	Close_Button->OnClicked.AddUnique(OnClickDelegate);
 
 }
@@ -47,11 +49,48 @@ int32 UBaseInventoryWidget::GetColumn(int32 Index, int32 SlPerRow) const
 	return trunc(Index % SlPerRow);
 }
 
-void UBaseInventoryWidget::CloseButtonClicked()
+void UBaseInventoryWidget::CloseOpenWidget()
 {
+	
+
+	APlayerController* CharacterController = UGameplayStatics::GetPlayerController(this, 0);
+
 	if (this->IsInViewport())
 	{
+		if (CharacterController)
+		{
+			CharacterController->SetInputMode(FInputModeGameOnly());
+			CharacterController->bShowMouseCursor = false;
+			CharacterController->bEnableClickEvents = false;
+			CharacterController->bEnableMouseOverEvents = false;
+
+
+		}
+
+		Inventory->SetInventoryState(EInventoryState::Closed);
 		this->RemoveFromViewport();
+
+
 	}
+	else
+	{
+
+		this->AddToViewport();
+		//InventoryWidget->SetUserFocus(UGameplayStatics::GetPlayerController(this, 0));
+
+		if (CharacterController)
+		{
+			CharacterController->SetInputMode(FInputModeGameAndUI());
+			CharacterController->bShowMouseCursor = true;
+			CharacterController->bEnableClickEvents = true;
+			CharacterController->bEnableMouseOverEvents = true;
+
+
+		}
+
+		Inventory->SetInventoryState(EInventoryState::OpenFree);
+
+	}
+
 
 }
