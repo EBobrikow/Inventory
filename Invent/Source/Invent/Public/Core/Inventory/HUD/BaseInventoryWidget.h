@@ -8,6 +8,7 @@
 #include "Core/Inventory/BaseInventory.h"
 #include "Core/Inventory/HUD/BaseSlotWidget.h"
 #include "Components/UniformGridPanel.h"
+#include "Core/Inventory/HUD/BaseRecicle.h"
 #include "BaseInventoryWidget.generated.h"
 
 /**
@@ -51,6 +52,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CloseOpenWidget();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<UBaseRecicle> BaseRecicleClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UBaseRecicle* RecicleRef;
+
+	UFUNCTION(BlueprintCallable)
+	void InitRecicle();
+
 
 protected:
 

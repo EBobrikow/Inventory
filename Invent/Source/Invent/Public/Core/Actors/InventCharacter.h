@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "Core/Inventory/BaseInventory.h"
 #include "Core/Inventory/HUD/BaseInventoryWidget.h"
+#include "Core/Inventory/Actors/BaseItemActor.h"
 #include "InventCharacter.generated.h"
 
 UCLASS(config=Game)
@@ -81,14 +82,17 @@ public:
 
 public:
 	// Inventory section
-	
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TArray<ABaseItemActor*> ItemsToPickUp;
 
 	/*UFUNCTION(BlueprintCallable)
 	void SetInventoryWidgetRef(UBaseInventoryWidget* InventRef);*/
 	
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<UUserWidget> InventoryWidgetClass;
+
+	UFUNCTION(BlueprintCallable)
+		void PickUpItem();
 
 protected:
 

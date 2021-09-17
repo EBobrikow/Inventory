@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Core/Inventory/BaseInventory.h"
 #include "ItemActorWidget.generated.h"
 
 /**
@@ -22,5 +23,8 @@ public:
 	UTextBlock* ItemName;
 
 	UFUNCTION(BlueprintCallable)
-		void SetItemName(bool isStackable, const FString& Name, int32 Amount);
+	void SetItemName(bool isStackable, const FString& Name, int32 Amount);
+
+
+
 };

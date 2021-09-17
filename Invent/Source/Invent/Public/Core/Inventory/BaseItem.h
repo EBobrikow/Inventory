@@ -7,6 +7,7 @@
 #include "Engine/Texture2D.h"
 #include "Engine/StaticMesh.h"
 #include "UObject/NoExportTypes.h"
+//#include "Core/Inventory/BaseInventory.h"
 #include "BaseItem.generated.h"
 
 /**
@@ -43,4 +44,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item params")
 	bool isUseble;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void UseBaseItem();
+
 };

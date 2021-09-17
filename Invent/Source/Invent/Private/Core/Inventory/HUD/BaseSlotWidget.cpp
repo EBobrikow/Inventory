@@ -24,7 +24,7 @@ void UBaseSlotWidget::UpdateSlotAmount()
 void UBaseSlotWidget::UpdateSlot()
 {
    // SlotAmountTxtCombo = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass()); //NewObject<UTextBlock>(UTextBlock::StaticClass());//CreateDefaultSubobject<UTextBlock>(TEXT("SlotTxtCombo"));
-    ItemIcon = NewObject<UImage>(UImage::StaticClass()); // WidgetTree->ConstructWidget<UImage>(UImage::StaticClass);
+    //ItemIcon = NewObject<UImage>(UImage::StaticClass()); // WidgetTree->ConstructWidget<UImage>(UImage::StaticClass);
     if (Inventory)
     {
         bool isEmpty = true;

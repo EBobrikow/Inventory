@@ -94,3 +94,14 @@ void UBaseInventoryWidget::CloseOpenWidget()
 
 
 }
+
+void UBaseInventoryWidget::InitRecicle()
+{
+	//BaseRecicleClass
+	if (BaseRecicleClass)
+	{
+		RecicleRef = CreateWidget<UBaseRecicle>(this, BaseRecicleClass);
+		RecicleRef->InventRef = Inventory;
+	}
+
+}

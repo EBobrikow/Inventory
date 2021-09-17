@@ -15,3 +15,7 @@ void ABaseItem::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void ABaseItem::UseBaseItem()
+{
+}

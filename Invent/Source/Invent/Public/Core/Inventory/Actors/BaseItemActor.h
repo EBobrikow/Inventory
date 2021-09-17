@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Core/Inventory/HUD/ItemActorWidget.h"
+#include "Core/Inventory/BaseItem.h"
+#include "Core/Inventory/BaseInventory.h"
+#include "Kismet/GameplayStatics.h"
 #include "BaseItemActor.generated.h"
 
 UCLASS()
@@ -32,5 +35,21 @@ public:
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite)
 	UStaticMesh* BaseMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ABaseItem> Item;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Amount;
+
+	
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	//TSubclassOf<ABaseItem> Item;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ExposeOnSpawn = "true"))
+	//int32 Amount;
+
+
 
 };

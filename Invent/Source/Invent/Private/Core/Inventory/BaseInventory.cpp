@@ -3,6 +3,7 @@
 
 #include "Core/Inventory/BaseInventory.h"
 #include "Core/Inventory/HUD/BaseInventoryWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 UBaseInventory::UBaseInventory()
@@ -74,9 +75,13 @@ void UBaseInventory::SwapSlotContent(int32 SlotNum1, int32 SlotNum2)
 {
 	if (Slots.Num() > 0 && SlotNum1 <= SlotsAmount && SlotNum2 <= SlotsAmount)
 	{
-		FSlotSignature tmp = Slots[SlotNum1];
+		/*FSlotSignature tmp = Slots[SlotNum1];
 		Slots[SlotNum1] = Slots[SlotNum2];
-		Slots[SlotNum2] = tmp;
+		Slots[SlotNum2].Amount = tmp.Amount;
+		Slots[SlotNum2].Item = tmp.Item;*/
+		Swap(Slots[SlotNum1], Slots[SlotNum2]);
+		UpdateWidgetSlot(SlotNum1);
+		UpdateWidgetSlot(SlotNum2);
 	}
 }
 
@@ -130,6 +135,211 @@ void UBaseInventory::SetInventoryWidget(UBaseInventoryWidget* invWidgetRef)
 		InventoryWidget = invWidgetRef;
 	}
 }
+
+void UBaseInventory::UpdateWidgetSlot(int32 Index)
+{
+	InventoryWidget->SlotWidgetArray[Index]->UpdateSlot();
+}
+
+bool UBaseInventory::SearchEmptySlot(int32& Index)
+{
+	for (int32 i = 0; i<Slots.Num();i++)
+	{
+		if (!Slots[i].Item)
+		{
+			Index = i;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool UBaseInventory::SearchSlotIndexForStack(TSubclassOf<ABaseItem> ItemCalssToSearch, int32& Index)
+{
+	for (int32 i = 0; i < Slots.Num(); i++)
+	{
+		if (Slots[i].Item && Slots[i].Item->GetClass() == ItemCalssToSearch)
+		{
+			Index = i;
+			return true;
+		}
+	}
+	return false;
+}
+
+int32 UBaseInventory::AddItem(ABaseItem* ItemClass, int32 Amount, bool& Success) // result 1 - added to empty slot, 2 - stacked to existing slot, 3 - no place in inventory
+{
+	int32 SearchIndex = 0;
+	if (Amount > 0)
+	{
+	
+		//ABaseItem* locItem = Cast<ABaseItem>(ItemClass->GetDefaultObject());
+		if (ItemClass->isStackable)
+		{
+			if (SearchSlotIndexForStack(ItemClass->GetClass(), SearchIndex))
+			{
+				Slots[SearchIndex].Amount += Amount;
+				UpdateWidgetSlot(SearchIndex);
+				Success = true;
+				return 2;
+			}
+			else
+			{
+				if (SearchEmptySlot(SearchIndex))
+				{
+					FSlotSignature UpdSlot = FSlotSignature();
+					UpdSlot.Amount = Amount;
+					UpdSlot.Item = ItemClass;
+					Slots[SearchIndex] = UpdSlot;
+					UpdateWidgetSlot(SearchIndex);
+					Success = true;
+					return 1;
+				}
+				else
+				{
+					Success = false;
+					return 3;
+				}
+			}
+		}
+		else
+		{
+			if (SearchEmptySlot(SearchIndex))
+			{
+				FSlotSignature UpdSlot = FSlotSignature();
+				UpdSlot.Amount = Amount;
+				UpdSlot.Item = ItemClass;
+				Slots[SearchIndex] = UpdSlot;
+				UpdateWidgetSlot(SearchIndex);
+				Success = true;
+				return 1;
+			}
+			else
+			{
+				Success = false;
+				return 3;
+			}
+		}
+	}
+	else
+	{
+		Success = false;
+		return 3;
+	}
+	
+	Success = false;
+	return 3;
+}
+
+void UBaseInventory::RemoveItemAtIndex(int32 Index, int32 Amount)
+{
+	if (Slots[Index].Amount <= Amount)
+	{
+		Slots[Index] = FSlotSignature();
+		UpdateWidgetSlot(Index);
+		return;
+	}
+	else
+	{
+		
+		Slots[Index].Amount -= Amount;
+		if (Slots[Index].Amount == 0)
+		{
+			Slots[Index] = FSlotSignature();
+		}
+		UpdateWidgetSlot(Index);
+		return;
+	}
+
+}
+
+int32 UBaseInventory::InvStateToInt(EInventoryState State)
+{
+	switch (State)
+	{
+	case Closed:
+		return 1;
+		break;
+	case OpenFree:
+		return 2;
+		break;
+	case DestroyItemWindow:
+		return 3;
+		break;
+	case DropItemWindow:
+		return 4;
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+void UBaseInventory::UseItemAtIndex(int32 Index)
+{
+	
+	if (InventoryState == EInventoryState::OpenFree)
+	{
+		Slots[Index].Item->UseBaseItem();
+		RemoveItemAtIndex(Index,1);
+	}
+}
+
+void UBaseInventory::InitConfWindow(bool WorkMode, int32 IndexOfDraggedSlot)
+{
+	//BaseRecicleClass
+	/*if (BaseConfirmWindowClass)
+	{*/
+		BaseConfirmWindowRef = CreateWidget<UBaseConfirmWindow>(UGameplayStatics::GetPlayerController(GetWorld(), 0), BaseConfirmWindowClass);
+		BaseConfirmWindowRef->InventReference = this;
+		BaseConfirmWindowRef->Mode = WorkMode;
+		BaseConfirmWindowRef->SlotIndex = IndexOfDraggedSlot;
+
+	//}
+}
+
+void UBaseInventory::DestroyItemAtIndex(int32 Indx)
+{
+	int32 x = 0, y = 0;
+	
+
+		/*InitConfWindow(true, Indx);
+		if (BaseConfirmWindowRef)
+		{
+			APlayerController* PlContr = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+			PlContr->GetViewportSize(x,y);
+			BaseConfirmWindowRef->AddToViewport();
+			BaseConfirmWindowRef->SetPositionInViewport(FVector2D(x/2,y/2));
+
+		}*/
+
+	Slots[Indx] = FSlotSignature();
+	UpdateWidgetSlot(Indx);
+	
+}
+
+void UBaseInventory::DestroyItemAtIndexNum(int32 Indx, int32 AmountToDel)
+{
+	if (AmountToDel >= Slots[Indx].Amount)
+	{
+		Slots[Indx] = FSlotSignature();
+
+	}
+	else
+	{
+		Slots[Indx].Amount -= AmountToDel;
+	}
+	UpdateWidgetSlot(Indx);
+	
+}
+
+void UBaseInventory::BroadcastDrop(int32 Index)
+{
+	DropDelegate.Broadcast(Index);
+
+}
+
+
 
 // Called every frame
 //void UBaseInventory::Tick(float DeltaTime)

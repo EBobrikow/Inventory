@@ -65,21 +65,6 @@ void AInventCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//FActorSpawnParameters SpawnInfo;
-	//Inventory = GWorld->SpawnActor<UBaseInventory>(FVector(0, 0, 0), FRotator::ZeroRotator, SpawnInfo);
-
-	//if (InventoryWidgetClass)
-	//{
-	//	InventoryWidget = Cast<UBaseInventoryWidget>(CreateWidget(GetWorld(), InventoryWidgetClass));
-	//	InventoryWidget->Inventory = CharacterInventory;
-	//	InventoryWidget->SetPositionInViewport(FVector2D(900, 200));
-	//	InventoryWidget->GenerateSlotWidgets();
-	//	if (InventoryWidget)
-	//	{
-	//		InventoryWidget->AddToViewport();
-	//	}
-	//}
-
 	ABaseHUD* hud = Cast<ABaseHUD>(UGameplayStatics::GetPlayerController(this, 0)->GetHUD());
 	hud->InitInventoryWidget(this);
 	
@@ -96,7 +81,8 @@ void AInventCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("Inventory", IE_Pressed, this, &AInventCharacter::OpenCloseInventory);
-	
+	PlayerInputComponent->BindAction("PickUp", IE_Pressed, this, &AInventCharacter::PickUpItem);
+	//PickUp
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AInventCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AInventCharacter::MoveRight);
@@ -130,57 +116,36 @@ UBaseInventory* AInventCharacter::GetCharacterInventory() const
 	
 }
 
-//void AInventCharacter::SetInventoryWidgetRef(UBaseInventoryWidget* InventRef)
-//{
-//	if (InventRef)
-//	{
-//		
-//		InventoryWidget = InventRef;
-//	}
-//	
-//}
+void AInventCharacter::PickUpItem()
+{
+	int32 AddItemResult = 0;
+	bool successRes = false;
+	if(ItemsToPickUp.Num() > 0)
+	if (ItemsToPickUp[0])
+	{
+		ABaseItem* LocItem = Cast<ABaseItem>(ItemsToPickUp[0]->Item->GetDefaultObject());
+		AddItemResult = CharacterInventory->AddItem(LocItem, ItemsToPickUp[0]->Amount, successRes);
+		switch (AddItemResult)
+		{
+		case 1: //added to empty slot
+			ItemsToPickUp[0]->Destroy();
+			break;
+		case 2:	//stacked to existing slot
+			ItemsToPickUp[0]->Destroy();
+			break;
+		case 3:	//no place in inventory
+			break;
+		default:
+			break;
+		}
+	}
+}
 
 void AInventCharacter::OpenCloseInventory()
 {
 	if (CharacterInventory->GetInventoryWidget())
 	{
 		CharacterInventory->GetInventoryWidget()->CloseOpenWidget();
-
-		//if (InventoryWidget->IsInViewport())
-		//{
-		//	if (CharacterController)
-		//	{
-		//		CharacterController->SetInputMode(FInputModeGameOnly());
-		//		CharacterController->bShowMouseCursor = false;
-		//		CharacterController->bEnableClickEvents = false;
-		//		CharacterController->bEnableMouseOverEvents = false;
-
-		//		
-		//	}
-		//	
-
-		//	InventoryWidget->RemoveFromViewport();
-
-		//	
-		//}
-		//else
-		//{
-		//	
-		//	InventoryWidget->AddToViewport();
-		//	//InventoryWidget->SetUserFocus(UGameplayStatics::GetPlayerController(this, 0));
-
-		//	if (CharacterController)
-		//	{
-		//		CharacterController->SetInputMode(FInputModeGameAndUI());
-		//		CharacterController->bShowMouseCursor = true;
-		//		CharacterController->bEnableClickEvents = true;
-		//		CharacterController->bEnableMouseOverEvents = true;
-
-		//		
-		//	}
-		//	
-
-		//}
 	}
 }
 
