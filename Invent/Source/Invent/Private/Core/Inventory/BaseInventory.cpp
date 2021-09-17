@@ -322,8 +322,9 @@ void UBaseInventory::DestroyItemAtIndexNum(int32 Indx, int32 AmountToDel)
 {
 	if (AmountToDel >= Slots[Indx].Amount)
 	{
-		Slots[Indx] = FSlotSignature();
-
+		//Slots[Indx] = FSlotSignature();
+		Slots.RemoveAt(Indx);
+		AddEmptySlot();
 	}
 	else
 	{
