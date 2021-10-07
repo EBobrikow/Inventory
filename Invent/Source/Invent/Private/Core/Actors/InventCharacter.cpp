@@ -143,10 +143,22 @@ void AInventCharacter::PickUpItem()
 
 void AInventCharacter::OpenCloseInventory()
 {
-	if (CharacterInventory->GetInventoryWidget())
+	switch (CharacterInventory->InventoryState)
 	{
-		CharacterInventory->GetInventoryWidget()->CloseOpenWidget();
+	case EInventoryState::DestroyItemWindow:
+
+		break;
+	case EInventoryState::Closed:
+	case EInventoryState::OpenFree:
+		if (CharacterInventory->GetInventoryWidget())
+		{
+			CharacterInventory->GetInventoryWidget()->CloseOpenWidget();
+		}
+		break;
+	default:
+		break;
 	}
+	
 }
 
 

@@ -128,6 +128,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BroadcastDrop(int32 Index);
 
+	UPROPERTY(EditAnywhere, Category = "Inventory params")
+	TEnumAsByte<EInventoryState> InventoryState;
+
 
 private:
 
@@ -141,8 +144,7 @@ private:
 
 protected:
 
-	UPROPERTY(EditAnywhere, Category = "Inventory params")
-		TEnumAsByte<EInventoryState> InventoryState;
+	
 
 	UPROPERTY()
 	UBaseInventoryWidget* InventoryWidget;

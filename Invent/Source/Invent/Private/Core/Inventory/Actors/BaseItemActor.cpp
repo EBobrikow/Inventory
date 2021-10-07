@@ -9,10 +9,10 @@ ABaseItemActor::ABaseItemActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BaseMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMeshComponent"));
-	RootComponent = BaseMeshComponent;
+	//BaseMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMeshComponent"));
+	//RootComponent = BaseMeshComponent;
 
-	BaseMesh = CreateDefaultSubobject<UStaticMesh>(TEXT("BaseMesh"));
+	//BaseMesh = CreateDefaultSubobject<UStaticMesh>(TEXT("BaseMesh"));
 	
 
 }
@@ -21,7 +21,7 @@ ABaseItemActor::ABaseItemActor()
 void ABaseItemActor::BeginPlay()
 {
 	Super::BeginPlay();
-	BaseMeshComponent->SetStaticMesh(BaseMesh);
+	//BaseMeshComponent->SetStaticMesh(BaseMesh);
 }
 
 // Called every frame

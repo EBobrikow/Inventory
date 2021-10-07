@@ -73,7 +73,7 @@ void UBaseInventory::AddItemToSlot(FSlotSignature Item, int32 SlotNum)
 
 void UBaseInventory::SwapSlotContent(int32 SlotNum1, int32 SlotNum2)
 {
-	if (Slots.Num() > 0 && SlotNum1 <= SlotsAmount && SlotNum2 <= SlotsAmount)
+	if (Slots.Num() > 0 && SlotNum1 <= SlotsAmount && SlotNum2 <= SlotsAmount && SlotNum1 != SlotNum2)
 	{
 		/*FSlotSignature tmp = Slots[SlotNum1];
 		Slots[SlotNum1] = Slots[SlotNum2];
@@ -233,13 +233,13 @@ int32 UBaseInventory::AddItem(ABaseItem* ItemClass, int32 Amount, bool& Success)
 
 void UBaseInventory::RemoveItemAtIndex(int32 Index, int32 Amount)
 {
-	if (Slots[Index].Amount <= Amount)
+	Slots[Index].Amount -= Amount;
+	if (Slots[Index].Amount <= 0)
 	{
 		Slots[Index] = FSlotSignature();
-		UpdateWidgetSlot(Index);
-		return;
 	}
-	else
+	UpdateWidgetSlot(Index);
+	/*else
 	{
 		
 		Slots[Index].Amount -= Amount;
@@ -249,7 +249,8 @@ void UBaseInventory::RemoveItemAtIndex(int32 Index, int32 Amount)
 		}
 		UpdateWidgetSlot(Index);
 		return;
-	}
+	}*/
+	
 
 }
 
@@ -320,17 +321,20 @@ void UBaseInventory::DestroyItemAtIndex(int32 Indx)
 
 void UBaseInventory::DestroyItemAtIndexNum(int32 Indx, int32 AmountToDel)
 {
-	if (AmountToDel >= Slots[Indx].Amount)
-	{
-		//Slots[Indx] = FSlotSignature();
-		Slots.RemoveAt(Indx);
-		AddEmptySlot();
-	}
-	else
-	{
-		Slots[Indx].Amount -= AmountToDel;
-	}
-	UpdateWidgetSlot(Indx);
+
+	RemoveItemAtIndex(Indx, AmountToDel);
+
+	//if (AmountToDel >= Slots[Indx].Amount)
+	//{
+	//	//Slots[Indx] = FSlotSignature();
+	//	Slots.RemoveAt(Indx);
+	//	AddEmptySlot();
+	//}
+	//else
+	//{
+	//	Slots[Indx].Amount -= AmountToDel;
+	//}
+	//UpdateWidgetSlot(Indx);
 	
 }
 

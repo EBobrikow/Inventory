@@ -51,46 +51,60 @@ int32 UBaseInventoryWidget::GetColumn(int32 Index, int32 SlPerRow) const
 
 void UBaseInventoryWidget::CloseOpenWidget()
 {
-	
 
 	APlayerController* CharacterController = UGameplayStatics::GetPlayerController(this, 0);
 
-	if (this->IsInViewport())
+	switch (Inventory->InventoryState)
 	{
-		if (CharacterController)
+	case EInventoryState::DestroyItemWindow:
+
+		break;
+	case EInventoryState::Closed:
+	case EInventoryState::OpenFree:
+		if (this->IsInViewport())
 		{
-			CharacterController->SetInputMode(FInputModeGameOnly());
-			CharacterController->bShowMouseCursor = false;
-			CharacterController->bEnableClickEvents = false;
-			CharacterController->bEnableMouseOverEvents = false;
+			if (CharacterController)
+			{
+				CharacterController->SetInputMode(FInputModeGameOnly());
+				CharacterController->bShowMouseCursor = false;
+				CharacterController->bEnableClickEvents = false;
+				CharacterController->bEnableMouseOverEvents = false;
+
+
+			}
+
+			Inventory->SetInventoryState(EInventoryState::Closed);
+			this->RemoveFromViewport();
 
 
 		}
-
-		Inventory->SetInventoryState(EInventoryState::Closed);
-		this->RemoveFromViewport();
-
-
-	}
-	else
-	{
-
-		this->AddToViewport();
-		//InventoryWidget->SetUserFocus(UGameplayStatics::GetPlayerController(this, 0));
-
-		if (CharacterController)
+		else
 		{
-			CharacterController->SetInputMode(FInputModeGameAndUI());
-			CharacterController->bShowMouseCursor = true;
-			CharacterController->bEnableClickEvents = true;
-			CharacterController->bEnableMouseOverEvents = true;
 
+			this->AddToViewport();
+			//InventoryWidget->SetUserFocus(UGameplayStatics::GetPlayerController(this, 0));
+
+			if (CharacterController)
+			{
+				CharacterController->SetInputMode(FInputModeGameAndUI());
+				CharacterController->bShowMouseCursor = true;
+				CharacterController->bEnableClickEvents = true;
+				CharacterController->bEnableMouseOverEvents = true;
+
+
+			}
+
+			Inventory->SetInventoryState(EInventoryState::OpenFree);
 
 		}
-
-		Inventory->SetInventoryState(EInventoryState::OpenFree);
-
+		break;
+	default:
+		break;
 	}
+
+	
+
+	
 
 
 }
