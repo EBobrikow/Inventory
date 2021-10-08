@@ -28,8 +28,8 @@ enum EInventoryStartMode
 	
 };
 
-UENUM()
-enum EInventoryState
+UENUM(BlueprintType)
+enum EInventoryState 
 {
 	Closed					UMETA(DisplayName = "Closed state"),
 	OpenFree				UMETA(DisplayName = "Open and free state"),

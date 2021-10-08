@@ -6,4 +6,6 @@
 void ABaseMushroom::UseBaseItem()
 {
 	UE_LOG(LogTemp,Warning,TEXT("Mushroom was used!"));
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 4.0f, FColor::Yellow, TEXT("Mushroom was used!"));
 }
